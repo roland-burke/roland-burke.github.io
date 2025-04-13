@@ -26,17 +26,17 @@ After putting a lot of time into the app—and using it almost daily, especially
 The first couple of commits were very hacky and just about playing around with the api. But soon i noticed that if i want to continue this app i need to think about some architecture to keep the code maintainable.
 
 ### Add suport for new devices
-One of the first challenges i faced, was how to efficiently handle the addition of supported devices. Using the XML-API each device has specific attributes. For example like this:
+One of the first challenges i faced, was how to efficiently handle the addition of supported devices. Using the XML-API each device has specific attributes. The data for a device for example looks like this:
 ```xml
-<device name='Heizkörperthermostat Wohnzimmer' ise_id='1643' unreach='false' config_pending='false'>
-	<channel name='Heizkörperthermostat Wohnzimmer' ise_id='1644' index='0' visible='true' operate='true'>
+<device name='Thermostat Living Room' ise_id='1643' unreach='false' config_pending='false'>
+	<channel name='Thermostat Living Room' ise_id='1644' index='0' visible='true' operate='true'>
 		<datapoint name='HmIP-RF.00399F299C4BFB:0.CONFIG_PENDING' type='CONFIG_PENDING' ise_id='1645' value='false' valuetype='2' valueunit='' timestamp='1668025987' operations='5' />
 		<datapoint name='HmIP-RF.00399F299C4BFB:0.LOW_BAT' type='LOW_BAT' ise_id='1651' value='false' valuetype='2' valueunit='' timestamp='1668025987' operations='5' />
 		<datapoint name='HmIP-RF.00399F299C4BFB:0.UNREACH' type='UNREACH' ise_id='1659' value='false' valuetype='2' valueunit='' timestamp='1668025987' operations='5' />
 		<datapoint name='HmIP-RF.00399F299C4BFB:0.UPDATE_PENDING' type='UPDATE_PENDING' ise_id='1663' value='false' valuetype='2' valueunit='' timestamp='1666901046' operations='5' />
         <!-- ... more datapoints ... -->
 	</channel>
-	<channel name='Heizkörperthermostat Steuerung Wohnzimmer' ise_id='1667' index='1' visible='true' operate='true'>
+	<channel name='Thermostat Control Living Room' ise_id='1667' index='1' visible='true' operate='true'>
 		<datapoint name='HmIP-RF.00399F299C4BFB:1.ACTIVE_PROFILE' type='ACTIVE_PROFILE' ise_id='1668' value='1' valuetype='16' valueunit='' timestamp='1668025987' operations='7' />
 		<datapoint name='HmIP-RF.00399F299C4BFB:1.ACTUAL_TEMPERATURE' type='ACTUAL_TEMPERATURE' ise_id='1669' value='22.600000' valuetype='4' valueunit='°C' timestamp='1668025987' operations='5' />
 		<datapoint name='HmIP-RF.00399F299C4BFB:1.ACTUAL_TEMPERATURE_STATUS' type='ACTUAL_TEMPERATURE_STATUS' ise_id='1670' value='0' valuetype='16' valueunit='' timestamp='1668025987' operations='5' />
@@ -51,13 +51,17 @@ One of the first challenges i faced, was how to efficiently handle the addition 
 	<!-- ... more channels ... -->
 </device>
 ```
-The device is a radiator thermostat which has attributes like `ACTUAL_TEMPERATURE` and `SET_POINT_TEMPERATURE` which represent the measured temperature and the configured temperature. These attributes can vary depending on the device hence the challenge is to find a way of efficiently manage supported devices without hardcoding each attribute. The solution i came up with, is a mapping file which i call Driver. Each type of the device has usually the same functionalities. For example a thermostat has the functionality to read and set the temperature. So in the mapping file i define the mapping of the actual attributes from the device to a custom property which i actually use in the code. For each supported device type i define custom properties to handle the specific functionality.
+In the example the device has attributes like `ACTUAL_TEMPERATURE` and `SET_POINT_TEMPERATURE` which represent the measured temperature and the configured temperature. These attributes can vary depending on the device hence the challenge is to find a way to efficiently manage supported devices without hardcoding each attribute. The solution I came up with, is a mapping file which I call Driver. Each type of a device has usually the same functionalities. For example a thermostat has the functionality to read and set the temperature. So in the file I define the mapping of the actual attributes from the device to custom properties which I use in the code.
 
-When i need to add a new device and the device type is already supported, i just need to add a single file which maps the attribute types from the device to my custom ones which i use in the code. Of course when i add a completely new device type, i also need to add the UI and functionality to make it work.
+When I need to add a new device and the device type is already supported, just a single file needs to be added which maps the attribute types from the device to my custom ones which I use in the code. Of course when a completely new device type needs to be added, then also the new UI and functionality has to be added.
 
 ### State management
+Another challenge was the state management. Initially I used the `setState` method from Flutter which notifies the framework that the internal state of the object has changed and causes the framework to schedule a build for the object. I also used `ChangeNotifier` to propagate the change of a value. By the time the code got messy and was somewhat hard to test.
+
+I discoverd the `flutter_bloc` which is a library for state management. There might be other solutions, but bloc sounded interesting so I decided to learn it and integrate it into the app. I replaced my custom solution with bloc, and the code cleaner and also better testable.
 
 ### Security
+During the planning of the scope for the release, 
 
 ## Release process
 
