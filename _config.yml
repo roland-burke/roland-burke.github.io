@@ -16,7 +16,7 @@ timezone: Europe/Berlin
 
 title: Roland Burke # the main title
 
-tagline: My personal tech blog - Currently work in progress # it will display as the subtitle
+tagline: My personal tech blog # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   A minimal, responsive and feature-rich Jekyll theme for technical writing.
