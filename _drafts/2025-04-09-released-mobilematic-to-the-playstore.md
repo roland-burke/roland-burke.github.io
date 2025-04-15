@@ -6,7 +6,11 @@ tags: [mobilematic, app, flutter, mobile, raspberrymatic, homematic]     # TAG n
 description: "This post is about my first App: Mobilematic"
 ---
 ## TL;DR
-I released an app to the google playstore which can control smart home devices from homematic using raspberrymatic. For development i used Flutter and the current main features include controlling thermostats, shutters and simple management of programs. The most important things i learned are designing a sustainable architecture for efficient maintenance, state mangement in Flutter, how to securly store credentials on an android device and how to release an app to the playstore.
+I released an app to the google playstore which can control smart home devices from homematic using raspberrymatic. For development I used Flutter and the current main features include controlling thermostats, shutters and simple management of programs. The most important things I learned are:
+- Designing a sustainable architecture for efficient maintenance
+- State mangement using Flutter
+- Securely store credentials on a mobile (android) device
+- Release an app to the google playstore
 
 ## Story
 A friend of mine had smart home devices from Homematic. As a CCU (Central Control Unit), he used a Raspberry Pi running RaspberryMatic to manage everything. At the time, he was already using an app to control the devices, but there were a few things about it that bothered him. We talked about it, and half-jokingly, he asked if I could build a better app. That sparked my curiosity, and just for fun, I started hacking something together. I quickly realized how much I enjoyed it and gradually got more interested in the topic. Eventually, I even bought my own smart home devices so I could use the app myself. Over time, I kept adding features and maintaining it.
@@ -58,10 +62,11 @@ When I need to add a new device and the device type is already supported, just a
 ### State management
 Another challenge was the state management. Initially I used the `setState` method from Flutter which notifies the framework that the internal state of the object has changed and causes the framework to schedule a build for the object. I also used `ChangeNotifier` to propagate the change of a value. By the time the code got messy and was somewhat hard to test.
 
-I discoverd the `flutter_bloc` which is a library for state management. There might be other solutions, but bloc sounded interesting so I decided to learn it and integrate it into the app. I replaced my custom solution with bloc, and the code cleaner and also better testable.
+I discoverd [flutter_bloc](https://pub.dev/packages/flutter_bloc) which is a library for state management. There might be other solutions, but bloc sounded interesting so I decided to learn it and integrate it into the app. I replaced my custom solution with bloc, and the code got cleaner and also better testable.
 
 ### Security
-During the planning of the scope for the release, 
+One thing I identified as important for the release, was security. Since the App just acts as a client which connects to the CCU, there aren't many security aspects. One important aspect though is the storage of the credentials on the mobile device.
+To solve this problem, I used [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage).
+With this library you can store AES encrypted key-value pairs using SharedPreferences. The key is stored using the platforms integrated mechanism, like Keychain for IOS and KeyStore for android.
 
 ## Release process
-
