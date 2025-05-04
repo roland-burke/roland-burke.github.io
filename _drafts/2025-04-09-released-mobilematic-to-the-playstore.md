@@ -70,3 +70,9 @@ To solve this problem, I used [flutter_secure_storage](https://pub.dev/packages/
 With this library you can store AES encrypted key-value pairs using SharedPreferences. The key is stored using the platforms integrated mechanism, like Keychain for IOS and KeyStore for android.
 
 ## Release process
+The release process was pretty annoying. Since I'm doing this as a hobby and don't have a company for that, I created a so called personal developer account. Releasing an app with such an account requires you to find at least 12 people, who must be "opted-in" for at least 14 consecutive days. It is nowhere documented, what "opted-in" exactly means. Like do they need to open the app everyday? Do they need to interact with it?
+Apperantly this just means, to have the app installed. That's all.
+
+I also had to create a website containing the privacy policy for the app. Luckily there isn't much for my app. I used Github Pages for that which I would really recommend, since it's fast, easy and free.
+
+Besides that I had to configure the standard stuff like descriptions, answer some questions about my app, upload screenshots etc. After some time and reviews from Google everything was okay I could finally release it to production 🥳.
